@@ -1,3 +1,4 @@
+import dotenv from "dotenv";
 import express from 'express';
 import cors from 'cors';
 import mongoose from 'mongoose';
@@ -14,6 +15,7 @@ import kanbanRoutes from "./routes/kanbanRoutes.js";
 import mindmapRoutes from "./routes/mindmapRoutes.js";
 
 
+dotenv.config();
 const app = express();
 const port = 3500;
 
@@ -24,7 +26,7 @@ app.use(bodyParser.json());
 
 // Connect to MongoDB
 mongoose
-  .connect("mongodb+srv://Alex:alexpassword@lynxcluster.ozp7iwm.mongodb.net/?appName=LynxCluster")
+  .connect(process.env.MONGO_URI)
   .then(() => {
     console.log("Connected to MongoDB");
   })
@@ -64,4 +66,5 @@ app.use((err, req, res, next) => {
 // Start server
 app.listen(port, () => {
   console.log('Server is running');
+
 });
