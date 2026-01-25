@@ -196,6 +196,7 @@ router.get("/:projectId/members", async (req, res) => {
 /**
  * ADD MEMBER TO PROJECT
  */
+/* old
 router.post("/:projectId/members", async (req, res) => {
   try {
     const { userId, role } = req.body;
@@ -247,7 +248,72 @@ router.post("/:projectId/members", async (req, res) => {
       error: error.message
     });
   }
+}); */
+
+router.post("/:projectId/members", async (req, res) => {
+  try {
+    const { userId, username, role } = req.body;
+
+    const project = await ProjectSpace.findById(req.params.projectId);
+    if (!project) {
+      return res.status(404).json({ success: false, message: "Project not found" });
+    }
+
+    let user;
+
+    if (userId) {
+      user = await User.findById(userId);
+    } else if (username) {
+      user = await User.findOne({ username });
+    } else {
+      return res.status(400).json({
+        success: false,
+        message: "userId or username is required",
+      });
+    }
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    const alreadyMember = project.members.some(
+      (member) => member.user.toString() === user._id.toString()
+    );
+
+    if (alreadyMember) {
+      return res.status(400).json({
+        success: false,
+        message: "User already a member of this project",
+      });
+    }
+
+    project.members.push({
+      user: user._id,
+      role: role || "member",
+    });
+
+    await project.save();
+
+    res.status(201).json({
+      success: true,
+      message: "Member added successfully",
+      member: {
+        user: user._id,
+        username: user.username,
+      },
+    });
+  } catch (error) {
+    console.error("Add member error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Error adding member",
+    });
+  }
 });
+
 
 /**
  * UPDATE MEMBER ROLE

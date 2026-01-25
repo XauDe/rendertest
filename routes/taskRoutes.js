@@ -167,6 +167,7 @@ router.delete("/:taskId", async (req, res) => {
 router.get("/project/:projectId", async (req, res) => {
   try {
     const tasks = await Task.find({ projectSpace: req.params.projectId })
+      .populate("projectSpace", "name")
       .populate("assignee", "username firstname lastname")
       .populate("assigner", "username");
 

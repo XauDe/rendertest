@@ -15,7 +15,6 @@ import kanbanRoutes from "./routes/kanbanRoutes.js";
 import mindmapRoutes from "./routes/mindmapRoutes.js";
 
 
-dotenv.config();
 const app = express();
 const port = 3500;
 
@@ -66,5 +65,4 @@ app.use((err, req, res, next) => {
 // Start server
 app.listen(port, () => {
   console.log('Server is running');
-
 });
