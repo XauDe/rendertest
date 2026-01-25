@@ -13,6 +13,7 @@ import boardRoutes from "./routes/boardRoutes.js";
 import singleBoardRoutes from "./routes/singleBoardRoutes.js";
 import kanbanRoutes from "./routes/kanbanRoutes.js";
 import mindmapRoutes from "./routes/mindmapRoutes.js";
+dotenv.config();
 
 
 const app = express();
@@ -65,4 +66,5 @@ app.use((err, req, res, next) => {
 // Start server
 app.listen(port, () => {
   console.log('Server is running');
+
 });
