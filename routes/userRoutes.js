@@ -9,7 +9,7 @@ const router = express.Router();
 // REGISTER NEW USER
 router.post('/register', async (req, res) => {
   try {
-    const { username, firstname, lastname, email, password } = req.body;
+    const { username, email, password } = req.body;
     
     // Check if user already exists
     const existingUser = await User.findOne({ $or: [{ email }, { username }] });
@@ -23,8 +23,6 @@ router.post('/register', async (req, res) => {
     // Create new user
     const user = new User({
       username,
-      firstname,
-      lastname,
       email,
       password // ⚠️ In production, hash this!
     });
@@ -37,8 +35,6 @@ router.post('/register', async (req, res) => {
       user: {
         _id: user._id,
         username: user.username,
-        firstname: user.firstname,
-        lastname: user.lastname,
         email: user.email
       }
     });
@@ -81,8 +77,6 @@ router.post('/login', async (req, res) => {
       user: {
         _id: user._id,
         username: user.username,
-        firstname: user.firstname,
-        lastname: user.lastname,
         email: user.email
       }
     });
@@ -105,8 +99,8 @@ router.get('/:userId/projects', async (req, res) => {
     const projects = await ProjectSpace.find({
       'members.user': userId
     })
-    .populate('owner', 'username firstname lastname email')
-    .populate('members.user', 'username firstname lastname email');
+    .populate('owner', 'username email')
+    .populate('members.user', 'username email');
     
     // Add role information for each project
     const projectsWithRole = projects.map(project => {
@@ -204,7 +198,7 @@ router.get('/:userId/tasks', async (req, res) => {
     // Get all tasks assigned to this user
     const tasks = await Task.find({ assignee: userId })
       .populate('projectSpace', 'name')
-      .populate('assignee', 'username firstname lastname')
+      .populate('assignee', 'username')
       .populate('assigner', 'username')
       .sort({ dueDate: 1, createdAt: -1 });
 

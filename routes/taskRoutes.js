@@ -74,8 +74,8 @@ router.get("/:taskId", async (req, res) => {
   try {
     const task = await Task.findById(req.params.taskId)
       .populate("projectSpace", "name")
-      .populate("assignee", "username firstname lastname")
-      .populate("assigner", "username firstname lastname");
+      .populate("assignee", "username")
+      .populate("assigner", "username");
 
     if (!task) {
       return res.status(404).json({
@@ -168,7 +168,7 @@ router.get("/project/:projectId", async (req, res) => {
   try {
     const tasks = await Task.find({ projectSpace: req.params.projectId })
       .populate("projectSpace", "name")
-      .populate("assignee", "username firstname lastname")
+      .populate("assignee", "username")
       .populate("assigner", "username");
 
     res.json({

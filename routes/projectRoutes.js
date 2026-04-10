@@ -48,8 +48,8 @@ router.post("/", async (req, res) => {
 router.get("/", async (req, res) => {
   try {
     const projects = await ProjectSpace.find()
-      .populate("owner", "username firstname lastname")
-      .populate("members.user", "username firstname lastname");
+      .populate("owner", "username")
+      .populate("members.user", "username");
 
     res.json({
       success: true,
@@ -72,8 +72,8 @@ router.get("/", async (req, res) => {
 router.get("/:projectId", async (req, res) => {
   try {
     const project = await ProjectSpace.findById(req.params.projectId)
-      .populate("owner", "username firstname lastname email")
-      .populate("members.user", "username firstname lastname email");
+      .populate("owner", "username email")
+      .populate("members.user", "username email");
 
     if (!project) {
       return res.status(404).json({
@@ -170,7 +170,7 @@ router.patch("/:projectId/archive", async (req, res) => {
 router.get("/:projectId/members", async (req, res) => {
   try {
     const project = await ProjectSpace.findById(req.params.projectId)
-      .populate("members.user", "username firstname lastname email");
+      .populate("members.user", "username email");
 
     if (!project) {
       return res.status(404).json({

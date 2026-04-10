@@ -62,7 +62,7 @@ router.get("/", async (req, res) => {
     const messages = await ProjectMessage.find({
       projectSpace: projectId
     })
-      .populate("sender", "username firstname lastname")
+      .populate("sender", "username")
       .sort({ createdAt: 1 });
 
     res.json({

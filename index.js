@@ -16,6 +16,7 @@ import mindmapRoutes from "./routes/mindmapRoutes.js";
 dotenv.config();
 
 
+
 const app = express();
 const port = 3500;
 
@@ -26,7 +27,7 @@ app.use(bodyParser.json());
 
 // Connect to MongoDB
 mongoose
-  .connect(process.env.MONGO_URI)
+  .connect('mongodb://localhost:27017/lynxapp')
   .then(() => {
     console.log("Connected to MongoDB");
   })
@@ -66,5 +67,4 @@ app.use((err, req, res, next) => {
 // Start server
 app.listen(port, () => {
   console.log('Server is running');
-
 });
